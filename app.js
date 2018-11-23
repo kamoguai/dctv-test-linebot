@@ -3,9 +3,9 @@ var linebot = require('linebot');
 var express = require('express');
 // 填入辨識Line Channel的資訊
 var bot = linebot({
-    channelId: '1621605839',
-    channelSecret: '7b8132d843d318d74a87e3f28a8dfecb',
-    channelAccessToken: '+KZhm8BtUaRT6gPzU08vL2e2RzgDQtwtTChRRZ7BCZ9c2WjWlBYd8XYKJzL+NHF5TlTMdAw5hQMLgZ7+YwMzZTwrjJ8w8KPEO0vTHa4VBfqTDnXrclak7VWQyxna2B2u3n1OfWOFO1l3slLBXQyfaQdB04t89/1O/w1cDnyilFU='
+    channelId: process.env.CHANNEL_ID,
+    channelSecret: process.env.CHANNEL_SECRET,
+    channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN
 });
 
 // 當有人傳送訊息給Bot時
@@ -43,8 +43,9 @@ app.get("/", function(reqs,reps) {
 app.post('/', linebotParser);
 // 因為 express 預設走 port 3000，而 heroku 上預設卻不是，要透過下列程式轉換
 var server = app.listen(process.env.PORT || 8080, function() {
+    var host = server.address().address;
     var port = server.address().port;
-    console.log("App now running on port",port);
+    console.log("App now running on http://%s:%s",host,port);
 });
 // Bot所監聽的webhook路徑與port, 此為local端運作
 // bot.listen('/webhook', 3000, function () {
