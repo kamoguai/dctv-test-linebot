@@ -32,7 +32,7 @@ bot.on('message', function (event) {
         setTimeout(function() {
             var userId = source.userId;
             var sendMsg = '五秒後，第一次發送信息';
-            bot.push(userId,sendMsg);
+            bot.push(source.groupId,sendMsg);
             console.log('send: ' + sendMsg);
         },5000);
     } 
