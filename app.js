@@ -29,6 +29,7 @@ bot.on('message', function (event) {
 */
         // 設定timmer執行事件
         console.log('groupID => ' + source.groupId);
+        console.log('source data => ' + source);
         setTimeout(function() {
             var userId = source.userId;
             var sendMsg = '五秒後，第一次發送信息';
