@@ -45,11 +45,11 @@ app.get("/", function(reqs,resp) {
 
 // 當有人傳送訊息給Bot時
 bot.on('message', function (event) {
+    console.log('message type => ' + event.message.type);
     switch (event.message.type) {
-        console.log(event.message.type);
         case 'text':
+        console.log('user say => ' + event.message.text)
           switch (event.message.text) {
-            console.log(evnet.message.text);
              case '回升蟲,空氣品質':
              console.log('show AQI data');
                let data;
