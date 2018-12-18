@@ -72,7 +72,7 @@ bot.on('message', function (event) {
 
                 event.reply('請稍等,立馬為您查詢')
                 setTimeout(function() {
-                    bot.push(source.groupId,respMSG);
+                    bot.push(event.source.groupId,respMSG);
                     },1000);
                }).catch(function(err) {
                     event.reply('無法取得空氣品質資料');
