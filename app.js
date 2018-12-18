@@ -32,7 +32,7 @@ function readAQI(repose) {
 function readAQI(repose,site_name) {
     let data;
     for (i in repose) {
-        if (repose[i].SiteName == SITE_NAME) {
+        if (repose[i].SiteName == site_name) {
             data = repose[i];
             break;
         }
