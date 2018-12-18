@@ -64,7 +64,7 @@ bot.on('message', function (event) {
                let respMSG;
                rp(opts).then(function(repos) {
                    data = readAQI(repos);
-                    respMSG = ata.County + 
+                    respMSG = data.County + 
                     data.SiteName + 
                     '\n\nPM2.5指數：' + 
                     data["PM2.5_AVG"] + 
