@@ -46,9 +46,12 @@ app.get("/", function(reqs,resp) {
 // 當有人傳送訊息給Bot時
 bot.on('message', function (event) {
     switch (event.message.type) {
+        console.log('message.type =>' + event.message.type);
         case 'text':
           switch (event.message.text) {
+            console.log('user say => ' + evnet.message.text);
              case '回升蟲,空氣品質':
+             console.log('show AQI data');
                let data;
                rp(opts).then(function(repos) {
                    data = readAQI(repos);
@@ -62,6 +65,7 @@ bot.on('message', function (event) {
                });
                break;
              case '回升重':
+             console.log('show user profile');
                  event.source.profile().then(function(profile) {
                     return event.reply('您好' + profile.displayName + ' ' + profile.userId);
                  });
