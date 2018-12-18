@@ -61,7 +61,7 @@ bot.on('message', function (event) {
              case '回升蟲,空氣品質':
              console.log('show AQI data');
                let data;
-               let respMSG = "";
+               let respMSG;
                rp(opts).then(function(repos) {
                    data = readAQI(repos);
                     respMSG = ata.County + 
@@ -72,9 +72,9 @@ bot.on('message', function (event) {
 
                 event.reply('請稍等,立馬為您查詢')
                 console.log("groupId => " + event.source.groupId);
-                // setTimeout(function() {
-                //     bot.push(event.source.groupId,respMSG);
-                //     },1000);
+                setTimeout(function() {
+                    bot.push(event.source.groupId,respMSG);
+                    },1000);
                }).catch(function(err) {
                     event.reply('無法取得空氣品質資料');
                });
