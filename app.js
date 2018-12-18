@@ -46,13 +46,14 @@ const app = express();
 app.set('view engine', 'ejs');
 
 const linebotParser = bot.parser();
-
+const users = ['Cdbb6d8ecabb0f59d82074f8e95b15e01','Ca6f119fa33940d2456e3f3bfc835e117'];
 app.get("/", function(reqs,resp) {
-    rp(opts).then(function(repos) {
-        resp.render('app', {AQI:readAQI(repos)});
-    }).catch(function(err) {
-        resp.send('無法取得空氣品質資料');
-    });
+    // rp(opts).then(function(repos) {
+    //     resp.render('app', {AQI:readAQI(repos)});
+    // }).catch(function(err) {
+    //     resp.send('無法取得空氣品質資料');
+    // });
+    bot.push(users,'一次發送多群組');
 });
 const password = "kamoguai"
 app.get("/pushMessage", function(reqs,resp) {
@@ -145,4 +146,8 @@ var server = app.listen(process.env.PORT || 8080, function() {
 // bot.listen('/webhook', 3000, function () {
 //     console.log('[BOT已準備就緒]');
 // });
+
+
+// 小圈圈 Cdbb6d8ecabb0f59d82074f8e95b15e01
+// 回聲應用 Ca6f119fa33940d2456e3f3bfc835e117
 
