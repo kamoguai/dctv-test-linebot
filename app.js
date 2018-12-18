@@ -42,6 +42,14 @@ app.get("/", function(reqs,resp) {
         resp.send('無法取得空氣品質資料');
     });
 });
+const password = "kamoguai"
+app.get("/pushMessage", function(reqs,resp) {
+    if (reqs.query.key !== password) {
+        resp.status(401).send('Error')
+    }
+    let message = reqs.query.message;
+    resp.send("您輸入的是 => " + message);
+})
 
 // 當有人傳送訊息給Bot時
 bot.on('message', function (event) {
@@ -53,27 +61,33 @@ bot.on('message', function (event) {
              case '回升蟲,空氣品質':
              console.log('show AQI data');
                let data;
+               let respMSG = "";
                rp(opts).then(function(repos) {
                    data = readAQI(repos);
-                   event.reply(data.County + 
+                    respMSG = ata.County + 
                     data.SiteName + 
                     '\n\nPM2.5指數：' + 
                     data["PM2.5_AVG"] + 
-                    '\n狀態：' + data.Status);
+                    '\n狀態：' + data.Status
+
+                event.reply('請稍等,立馬為您查詢')
+                setTimeout(function() {
+                    bot.push(source.groupId,respMSG);
+                    },1000);
                }).catch(function(err) {
                     event.reply('無法取得空氣品質資料');
                });
                break;
-             case '回升重':
+             case '回升蟲,我':
              console.log('show user profile');
                  event.source.profile().then(function(profile) {
-                    return event.reply('您好' + profile.displayName + ' ' + profile.userId);
+                    return event.reply('您好 ' + profile.displayName + '\n您的userId為 : ' + profile.userId);
                  });
                break;
           }
           break;
         default:
-            event.reply('未知的信息：' + JSON.stringify(event));
+            // event.reply('未知的信息：' + JSON.stringify(event));
             break;
     }
      // setTimeout(function() {
