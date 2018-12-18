@@ -53,7 +53,7 @@ app.get("/", function(reqs,resp) {
     // }).catch(function(err) {
     //     resp.send('無法取得空氣品質資料');
     // });
-    bot.push(users,'一次發送多群組');
+    // bot.push(users,'一次發送多群組');
 });
 const password = "kamoguai"
 app.get("/pushMessage", function(reqs,resp) {
