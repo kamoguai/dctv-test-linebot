@@ -61,6 +61,7 @@ app.get("/pushMessage", function(reqs,resp) {
     let data;
     let response;
     rp(opts).then(function(repos,message) {
+        console.log("call http request");
         data = readAQI(repos);
         response = '發佈時間: ' + data.PublishTime + 
         '\n查詢位置: ' + data.County + data.SiteName + 
@@ -70,7 +71,7 @@ app.get("/pushMessage", function(reqs,resp) {
     }).catch(function(err) {
         resp.send("發生錯誤，請查明後再撥")
     });
-    resp.send("您輸入的是 => " + message);
+    // resp.send("您輸入的是 => " + message);
 })
 
 // 當有人傳送訊息給Bot時
