@@ -29,7 +29,17 @@ function readAQI(repose) {
     console.log(data);
     return data;
 }
-
+function readAQI(repose,site_name) {
+    let data;
+    for (i in repose) {
+        if (repose[i].SiteName == SITE_NAME) {
+            data = repose[i];
+            break;
+        }
+    }
+    console.log(data);
+    return data;
+}
 const app = express();
 app.set('view engine', 'ejs');
 
@@ -48,6 +58,18 @@ app.get("/pushMessage", function(reqs,resp) {
         resp.status(401).send('Error')
     }
     let message = reqs.query.message;
+    let data;
+    let response;
+    rp(opts).then(function(repos,message) {
+        data = readAQI(repos);
+        response = '發佈時間: ' + data.PublishTime + 
+        '\n查詢位置: ' + data.County + data.SiteName + 
+        '\nPM2.5指數：' + data["PM2.5_AVG"] + 
+        '\n狀態：' + data.Status
+        resp.send(response);
+    }).catch(function(err) {
+        resp.send("發生錯誤，請查明後再撥")
+    });
     resp.send("您輸入的是 => " + message);
 })
 
@@ -57,6 +79,8 @@ bot.on('message', function (event) {
     switch (event.message.type) {
         case 'text':
         console.log('user say => ' + event.message.text)
+        let userMSG = event.message.text;
+
           switch (event.message.text) {
              case '回升蟲,空氣品質':
              console.log('show AQI data');
@@ -64,10 +88,9 @@ bot.on('message', function (event) {
                let respMSG;
                rp(opts).then(function(repos) {
                    data = readAQI(repos);
-                    respMSG = data.County + 
-                    data.SiteName + 
-                    '\n\nPM2.5指數：' + 
-                    data["PM2.5_AVG"] + 
+                    respMSG = '發佈時間: ' + data.PublishTime + 
+                    '\n查詢位置: ' + data.County + data.SiteName + 
+                    '\nPM2.5指數：' + data["PM2.5_AVG"] + 
                     '\n狀態：' + data.Status
 
                 event.reply('請稍等,立馬為您查詢')
