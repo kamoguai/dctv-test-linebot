@@ -19,6 +19,7 @@ var bot = linebot({
 
 // 處理取得空氣品質json data
 function readAQI(repose) {
+    console.log('one params');
     let data;
     for (i in repose) {
         if (repose[i].SiteName == SITE_NAME) {
@@ -29,7 +30,8 @@ function readAQI(repose) {
     console.log(data);
     return data;
 }
-function readAQI(repose,site_name) {
+function readAQI2(repose,site_name) {
+    console.log('two params');
     let data;
     for (i in repose) {
         if (repose[i].SiteName == site_name) {
@@ -58,11 +60,18 @@ app.get("/pushMessage", function(reqs,resp) {
         resp.status(401).send('Error')
     }
     let message = reqs.query.message;
+    let splitStr;
+    if (message.indexOf('空氣品質') > -1) {
+        splitStr = message.split(',');
+        splitStr = splitStr[1];
+
+    }
+    
     let data;
     let response;
     rp(opts).then(function(repos) {
         console.log("call http request");
-        data = readAQI(repos,message);
+        data = readAQI2(repos,splitStr);
         response = '發佈時間: ' + data.PublishTime + 
         '\n查詢位置: ' + data.County + data.SiteName + 
         '\nPM2.5指數：' + data["PM2.5_AVG"] + 
