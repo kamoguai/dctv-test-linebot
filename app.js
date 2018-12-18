@@ -60,9 +60,9 @@ app.get("/pushMessage", function(reqs,resp) {
     let message = reqs.query.message;
     let data;
     let response;
-    rp(opts).then(function(repos,message) {
+    rp(opts).then(function(repos) {
         console.log("call http request");
-        data = readAQI(repos);
+        data = readAQI(repos,message);
         response = '發佈時間: ' + data.PublishTime + 
         '\n查詢位置: ' + data.County + data.SiteName + 
         '\nPM2.5指數：' + data["PM2.5_AVG"] + 
