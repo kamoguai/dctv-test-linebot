@@ -1,6 +1,15 @@
-// 引用linebot SDK
+// 引用linebot SDK & 其他需要的
 var linebot = require('linebot');
 var express = require('express');
+var rp = require('request-promise');
+var bodyParser = require('body-parser');
+
+const SITE_NAME = "板橋"
+const opts = {
+    uri: "http://opendata2.epa.gov.tw/AQI.json",
+    json: true
+};
+
 // 填入辨識Line Channel的資訊
 var bot = linebot({
     channelId: process.env.CHANNEL_ID,
@@ -8,42 +17,71 @@ var bot = linebot({
     channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN
 });
 
-// 當有人傳送訊息給Bot時
-bot.on('message', function (event) {
-    if (event.message.type = 'text') {
-        var source = event.source
-        // event.message.text是使用者傳給bot的訊息
-        // 準備要回傳的內容
-        var replyMsg = `Hello你剛才說的是:${event.message.text}`;
-        // 透過event.reply(要回傳的訊息)方法將訊息回傳給使用者
-/*
-        event.reply(replyMsg).then(function (data) {
-            // 當訊息成功回傳後的處理
-            console.log("sucess");
-            console.log(source);
-            console.log(source.userId);
-        }).catch(function (error) {
-            // 當訊息回傳失敗後的處理
-            console.log("fail");
-        }); 
-*/
-        // 設定timmer執行事件
-        console.log('groupID => ' + source.groupId);
-        console.log('source data => ' + source);
-        setTimeout(function() {
-            var userId = source.userId;
-            var sendMsg = '五秒後，第一次發送信息';
-            bot.push(source.groupId,sendMsg);
-            console.log('send: ' + sendMsg);
-        },5000);
-    } 
-});
+// 處理取得空氣品質json data
+function readAQI(repose) {
+    let data;
+    for (i in repose) {
+        if (repose[i].SiteName == SITE_NAME) {
+            data = repose[i];
+            break;
+        }
+    }
+    console.log(data);
+    return data;
+}
 
 const app = express();
+app.set('view engine', 'ejs');
+
 const linebotParser = bot.parser();
-app.get("/", function(reqs,reps) {
-    reps.send("Hello World");
+
+app.get("/", function(reqs,resp) {
+    rp(opts).then(function(repos) {
+        resp.render('app', {AQI:readAQI(repos)});
+    }).catch(function(err) {
+        resp.send('無法取得空氣品質資料');
+    });
 });
+
+// 當有人傳送訊息給Bot時
+bot.on('message', function (event) {
+    switch (event.message.type) {
+        case 'text':
+          switch (event.message.text) {
+             case '回升蟲,空氣品質':
+               let data;
+               rp(opts).then(function(repos) {
+                   data = readAQI(repos);
+                   event.reply(data.County + 
+                    data.SiteName + 
+                    '\n\nPM2.5指數：' + 
+                    data["PM2.5_AVG"] + 
+                    '\n狀態：' + data.Status);
+               }).catch(function(err) {
+                    event.reply('無法取得空氣品質資料');
+               });
+               break;
+             case '回升重':
+                 event.source.profile().then(function(profile) {
+                    return event.reply('您好' + profile.displayName + ' ' + profile.userId);
+                 });
+               break;
+          }
+          break;
+        default:
+            event.reply('未知的信息：' + JSON.stringify(event));
+            break;
+    }
+     // setTimeout(function() {
+     //        var userId = source.userId;
+     //        var sendMsg = '五秒後，第一次發送信息';
+     //        bot.push(source.groupId,sendMsg);
+     //        console.log('send: ' + sendMsg);
+     // },5000);
+});
+
+
+
 app.post('/', linebotParser);
 // 因為 express 預設走 port 3000，而 heroku 上預設卻不是，要透過下列程式轉換
 var server = app.listen(process.env.PORT || 8080, function() {
