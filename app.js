@@ -46,7 +46,7 @@ const app = express();
 app.set('view engine', 'ejs');
 
 const linebotParser = bot.parser();
-const users = ['Cdbb6d8ecabb0f59d82074f8e95b15e01','Ca6f119fa33940d2456e3f3bfc835e117'];
+const users = ['C23de35937777d72b40c984036cf85618','Ca6f119fa33940d2456e3f3bfc835e117'];
 app.get("/", function(reqs,resp) {
     // rp(opts).then(function(repos) {
     //     resp.render('app', {AQI:readAQI(repos)});
@@ -55,7 +55,7 @@ app.get("/", function(reqs,resp) {
     // });
     // bot.push(users,'一次發送多群組');
 });
-const password = "kamoguai"
+const password = "dctv"
 app.get("/pushMessage", function(reqs,resp) {
     if (reqs.query.key !== password) {
         resp.status(401).send('Error')
@@ -78,6 +78,7 @@ app.get("/pushMessage", function(reqs,resp) {
         '\nPM2.5指數：' + data["PM2.5_AVG"] + 
         '\n狀態：' + data.Status
         resp.send(response);
+        bot.push(users, response);
     }).catch(function(err) {
         resp.send("發生錯誤，請查明後再撥")
     });
@@ -150,4 +151,5 @@ var server = app.listen(process.env.PORT || 8080, function() {
 
 // 小圈圈 Cdbb6d8ecabb0f59d82074f8e95b15e01
 // 回聲應用 Ca6f119fa33940d2456e3f3bfc835e117
+// 回升應用2 C23de35937777d72b40c984036cf85618
 
