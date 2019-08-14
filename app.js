@@ -136,6 +136,14 @@ bot.on('message', function (event) {
      // },5000);
 });
 
+// 主動發送訊息
+setTimeout(function () {
+    var userId = 'Ca6f119fa33940d2456e3f3bfc835e117';
+    var sendMsg = "1分鐘發送一次信息";
+    bot.push(userId, [sendMsg]);
+    console.log('userId: ' + userId);
+    console.log('send: ' + sendMsg);
+}, 1000);
 
 
 app.post('/', linebotParser);
