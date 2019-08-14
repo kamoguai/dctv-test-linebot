@@ -54,7 +54,7 @@ app.get("/", function(reqs,resp) {
     //     resp.send('無法取得空氣品質資料');
     // });
     // bot.push(users,'一次發送多群組');
-    res.send("Hello LineBot");
+    resp.send("Hello LineBot");
 });
 const password = "dctv"
 app.get("/pushMessage", function(reqs,resp) {
