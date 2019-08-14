@@ -138,7 +138,7 @@ bot.on('message', function (event) {
 
 // 主動發送訊息
 setTimeout(function () {
-    var userId = 'Ca6f119fa33940d2456e3f3bfc835e117';
+    var userId = 'U366b03ee5fca34e7368c030428f4c9fa';
     var sendMsg = "1分鐘發送一次信息";
     bot.push(userId, [sendMsg]);
     console.log('userId: ' + userId);
