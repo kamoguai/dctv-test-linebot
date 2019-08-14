@@ -54,6 +54,7 @@ app.get("/", function(reqs,resp) {
     //     resp.send('無法取得空氣品質資料');
     // });
     // bot.push(users,'一次發送多群組');
+    res.send("Hello LineBot");
 });
 const password = "dctv"
 app.get("/pushMessage", function(reqs,resp) {
@@ -88,6 +89,7 @@ app.get("/pushMessage", function(reqs,resp) {
 // 當有人傳送訊息給Bot時
 bot.on('message', function (event) {
     console.log('message type => ' + event.message.type);
+    console.log("groupId => " + event.source.groupId);
     switch (event.message.type) {
         case 'text':
         console.log('user say => ' + event.message.text)
@@ -106,7 +108,7 @@ bot.on('message', function (event) {
                     '\n狀態：' + data.Status
 
                 event.reply('請稍等,立馬為您查詢')
-                console.log("groupId => " + event.source.groupId);
+                
                 setTimeout(function() {
                     bot.push(event.source.groupId,respMSG);
                     },1000);
