@@ -4,7 +4,7 @@
   "description": "first line bot",
   "main": "app.js",
   "dependencies": {
-    "express": "^4.16.4",
+    "express": "^4.18.2",
     "linebot": "^1.4.1",
     "request": "^2.88.0",
     "request-promise": "^4.2.2"
